@@ -1,3 +1,11 @@
+<div align="center">
+  <br />
+  <br />
+  <img src="public/light.svg" alt="Browser Use MCP Server" width="100%">
+  <br />
+  <br />
+</div>
+
 # Browser Use MCP Server
 
 A FastMCP server that enables browser automation through natural language commands. This server allows Language Models to browse the web, fill out forms, click buttons, and perform other web-based tasks via a simple API.
