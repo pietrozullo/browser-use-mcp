@@ -33,7 +33,7 @@ playwright install chromium
 
 Add the browser-use-mcp server to your MCP client configuration:
 
-```json
+```javascript
 {
     "mcpServers": {
         "browser-use-mcp": {
