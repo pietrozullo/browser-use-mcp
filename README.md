@@ -126,53 +126,30 @@ if __name__ == "__main__":
 
 The following LLM providers are supported for browser automation:
 
-| Provider | Models | Tool Calling | Structured Output | JSON Mode |
-|----------|--------|-------------|-------------------|-----------|
-| OpenAI | GPT-4o, GPT-4 Turbo, GPT-3.5 Turbo | ✅ | ✅ | ✅ |
-| Anthropic | Claude 3 Opus, Sonnet, Haiku | ✅ | ✅ | ✅ |
-| Google | Gemini Pro, Gemini Flash | ✅ | ✅ | ✅ |
-| Cohere | Command R, Command R+ | ✅ | ✅ | ❌ |
-| Mistral AI | Mistral Large, Small | ✅ | ✅ | ✅ |
-| Groq | LLaMA2, Mixtral, Claude models | ❌ | ✅ | ❌ |
-| Together AI | Various models | ✅ | ✅ | ❌ |
-| AWS Bedrock | Claude, Titan, Llama models | ✅ | ✅ | ❌ |
-| Fireworks AI | Llama, Mixtral models | ✅ | ✅ | ❌ |
-| Azure OpenAI | GPT-4, GPT-3.5 models | ✅ | ✅ | ✅ |
-| Vertex AI (Google) | Gemini models | ✅ | ✅ | ✅ |
-| NVIDIA | Various models | ✅ | ✅ | ❌ |
-| AI21 | Jamba models | ✅ | ✅ | ❌ |
-| Databricks | MPT, Dolly models | ❌ | ✅ | ❌ |
-| IBM watsonx.ai | Granite models | ❌ | ✅ | ❌ |
-| xAI | Grok models | ✅ | ✅ | ✅ |
-| Upstage | Solar models | ✅ | ✅ | ❌ |
-| Hugging Face | Models with tool calling | ✅ | ✅ | ❌ |
-| Ollama | Local models | ✅ | ✅ | ❌ |
-| Llama.cpp | Local models | ❌ | ✅ | ❌ |
+| Provider | API Key Environment Variable |
+|----------|----------------------------|
+| OpenAI | `OPENAI_API_KEY` |
+| Anthropic | `ANTHROPIC_API_KEY` |
+| Google | `GOOGLE_API_KEY` |
+| Cohere | `COHERE_API_KEY` |
+| Mistral AI | `MISTRAL_API_KEY` |
+| Groq | `GROQ_API_KEY` |
+| Together AI | `TOGETHER_API_KEY` |
+| AWS Bedrock | `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` |
+| Fireworks | `FIREWORKS_API_KEY` |
+| Azure OpenAI | `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` |
+| Vertex AI | `GOOGLE_APPLICATION_CREDENTIALS` |
+| NVIDIA | `NVIDIA_API_KEY` |
+| AI21 | `AI21_API_KEY` |
+| Databricks | `DATABRICKS_HOST` and `DATABRICKS_TOKEN` |
+| IBM watsonx.ai | `WATSONX_API_KEY` |
+| xAI | `XAI_API_KEY` |
+| Upstage | `UPSTAGE_API_KEY` |
+| Hugging Face | `HUGGINGFACE_API_KEY` |
+| Ollama | `OLLAMA_BASE_URL` |
+| Llama.cpp | `LLAMA_CPP_SERVER_URL` |
 
-## API Key Configuration
-
-You need to provide at least one API key to use this server. Set the appropriate environment variable for your chosen LLM provider:
-
-- OpenAI: `OPENAI_API_KEY`
-- Anthropic: `ANTHROPIC_API_KEY`
-- Google: `GOOGLE_API_KEY`
-- Cohere: `COHERE_API_KEY`
-- Mistral AI: `MISTRAL_API_KEY`
-- Groq: `GROQ_API_KEY`
-- Together AI: `TOGETHER_API_KEY`
-- AWS Bedrock: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-- Fireworks: `FIREWORKS_API_KEY`
-- Azure OpenAI: `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`
-- Vertex AI: `GOOGLE_APPLICATION_CREDENTIALS`
-- NVIDIA: `NVIDIA_API_KEY`
-- AI21: `AI21_API_KEY`
-- Databricks: `DATABRICKS_HOST`, `DATABRICKS_TOKEN`
-- IBM watsonx.ai: `WATSONX_API_KEY`
-- xAI: `XAI_API_KEY`
-- Upstage: `UPSTAGE_API_KEY`
-- Hugging Face: `HUGGINGFACE_API_KEY`
-- Ollama: Set Ollama endpoint with `OLLAMA_BASE_URL`
-- Llama.cpp: Set server endpoint with `LLAMA_CPP_SERVER_URL`
+For more information check out: https://python.langchain.com/docs/integrations/chat/
 
 You can create a `.env` file in the project directory with your API keys:
 
