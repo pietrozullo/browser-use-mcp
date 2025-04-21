@@ -1,0 +1,122 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "browser-use-mcp"
+version = "0.1.0"
+description = "Browser automation MCP server using browser-use"
+authors = [
+    {name = "Pietro Zullo"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "mcp[cli]",
+    "playwright",
+    "browser-use",
+    "python-dotenv",
+    # Core language model providers
+    "langchain-openai",
+    "langchain-anthropic",
+    "langchain-google-genai",
+    "langchain-cohere",
+    "langchain-mistralai",
+    "langchain-groq",
+    "langchain-community",
+]
+
+[project.optional-dependencies]
+# Core LLM providers
+openai = ["langchain-openai"]
+anthropic = ["langchain-anthropic"]
+google = ["langchain-google-genai"]
+cohere = ["langchain-cohere"]
+mistral = ["langchain-mistralai"]
+groq = ["langchain-groq"]
+together = ["langchain-together"]
+# Cloud providers
+aws = ["langchain-aws"]
+azure = ["langchain-openai"]
+vertex = ["langchain-google-vertexai"]
+fireworks = ["langchain-fireworks"]
+nvidia = ["langchain-nvidia-ai-endpoints"]
+databricks = ["langchain-databricks"]
+ai21 = ["langchain-ai21"]
+ibm = ["langchain-ibm"]
+xai = ["langchain-xai"]
+upstage = ["langchain-upstage"]
+# Local models
+huggingface = ["langchain-huggingface"]
+ollama = ["langchain-ollama"]
+llama-cpp = ["langchain-community"]
+# Group packages
+local-models = ["langchain-huggingface", "langchain-ollama", "langchain-community"]
+cloud-providers = [
+    "langchain-aws", 
+    "langchain-google-vertexai", 
+    "langchain-fireworks", 
+    "langchain-nvidia-ai-endpoints", 
+    "langchain-databricks", 
+    "langchain-ai21", 
+    "langchain-ibm", 
+    "langchain-xai", 
+    "langchain-upstage"
+]
+all-providers = [
+    # Core language model providers
+    "langchain-openai",
+    "langchain-anthropic", 
+    "langchain-google-genai",
+    "langchain-cohere",
+    "langchain-mistralai",
+    "langchain-groq",
+    "langchain-together",
+    # Cloud providers
+    "langchain-aws",
+    "langchain-fireworks",
+    "langchain-google-vertexai",
+    "langchain-nvidia-ai-endpoints",
+    "langchain-ai21",
+    "langchain-databricks",
+    "langchain-ibm",
+    "langchain-xai",
+    "langchain-upstage",
+    # Local models
+    "langchain-huggingface",
+    "langchain-ollama",
+    "langchain-community",
+]
+dev = [
+    "black",
+    "isort",
+    "pytest",
+    "pytest-asyncio",
+]
+
+[project.scripts]
+browser-use-mcp = "browser_use_mcp.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["browser_use_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 88 
