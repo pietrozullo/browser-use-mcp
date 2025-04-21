@@ -1,8 +1,118 @@
 # Browser Use MCP Server
 
-A FastMCP server that allows you to automate browser tasks with natural language.
+A FastMCP server that enables browser automation through natural language commands. This server allows Language Models to browse the web, fill out forms, click buttons, and perform other web-based tasks via a simple API.
 
-This server enables Language Models to browse the web, fill out forms, click buttons, and perform other web-based tasks via a simple API.
+## Quick Start
+
+### 1. Install the package
+
+Install with a specific provider (e.g., OpenAI)
+
+```bash
+pip install -e "git+https://github.com/yourusername/browser-use-mcp.git#egg=browser-use-mcp[openai]"
+```
+Or install all providers
+```bash
+
+pip install -e "git+https://github.com/yourusername/browser-use-mcp.git#egg=browser-use-mcp[all-providers]"
+```
+Install Playwright browsers
+```bash
+playwright install chromium
+```
+
+### 2. Configure your MCP client
+
+Add the browser-use-mcp server to your MCP client configuration:
+
+```json
+{
+    "mcpServers": {
+        "browser-use-mcp": {
+            "command": "browser-use-mcp",
+            "args": ["--model", "gpt-4o"],
+            "env": {
+                "OPENAI_API_KEY": "your-openai-api-key",  // Or any other provider's API key
+                "DISPLAY": ":0"  // For GUI environments
+            }
+        }
+    }
+}
+```
+
+Replace `"your-openai-api-key"` with your actual API key or use an environment variable reference like `process.env.OPENAI_API_KEY`.
+
+### 3. Use it with your favorite MCP client
+
+#### Example using mcp-use with Python
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from mcp_use import MCPAgent, MCPClient
+
+async def main():
+    # Load environment variables
+    load_dotenv()
+
+    # Create MCPClient from config file
+    client = MCPClient(
+        config={
+            "mcpServers": {
+                "browser-use-mcp": {
+                    "command": "browser-use-mcp",
+                    "args": ["--model", "gpt-4o"],
+                    "env": {
+                        "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+                        "DISPLAY": ":0",
+                    },
+                }
+            }
+        }
+    )
+
+    # Create LLM
+    llm = ChatOpenAI(model="gpt-4o")
+
+    # Create agent with the client
+    agent = MCPAgent(llm=llm, client=client, max_steps=30)
+
+    # Run the query
+    result = await agent.run(
+        """
+        Navigate to https://github.com, search for "browser-use-mcp", and summarize the project.
+        """,
+        max_steps=30,
+    )
+    print(f"\nResult: {result}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+#### Using Claude for Desktop
+
+1. Open Claude for Desktop
+2. Go to Settings → Experimental features
+3. Enable Claude API Beta and OpenAPI schema for API
+4. Add the following configuration to your Claude Desktop config file:
+   - Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%AppData%\Claude\claude_desktop_config.json`
+
+```json
+{
+    "mcpServers": {
+        "browser-use": {
+            "command": "browser-use-mcp",
+            "args": ["--model", "claude-3-opus-20240229"]
+        }
+    }
+}
+```
+
+5. Start a new conversation with Claude and ask it to perform web tasks
 
 ## Supported LLM Providers
 
@@ -30,112 +140,6 @@ The following LLM providers are supported for browser automation:
 | Hugging Face | Models with tool calling | ✅ | ✅ | ❌ |
 | Ollama | Local models | ✅ | ✅ | ❌ |
 | Llama.cpp | Local models | ❌ | ✅ | ❌ |
-
-## Installation
-
-### Option 1: Using the standalone script (Recommended)
-
-This method creates an isolated environment without affecting your system installation:
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/browser-use-mcp.git
-cd browser-use-mcp
-
-# Run with default settings (temporary venv)
-python run.py
-
-# Run with persistent venv for faster subsequent runs
-python run.py --keep-venv
-
-# Install all providers
-python run.py --all-providers
-
-# Install a specific provider
-python run.py --provider openai
-
-# Use a specific model
-python run.py --provider anthropic --model claude-3-haiku-20240307
-
-# Use a specific .env file
-python run.py --env-file /path/to/.env
-
-# Enable debug logging
-python run.py --debug
-```
-
-### Option 2: Using `pip`
-
-Install directly with pip (with specific provider):
-
-```bash
-# Create a virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install with pip
-pip install -e ".[openai]"  # For OpenAI
-pip install -e ".[anthropic]"  # For Anthropic
-pip install -e ".[all-providers]"  # All providers
-
-# Install Playwright browsers
-playwright install chromium
-
-# Run the server
-python -m browser_use_mcp
-```
-
-### Option 3: Using `pipx` for isolated installation
-
-For an isolated global installation:
-
-```bash
-# Install using pipx
-pipx install -e ".[openai]"
-
-# Run the server
-browser-use-mcp
-```
-
-## Provider Categories
-
-Providers are organized into categories in `pyproject.toml`:
-
-1. **Core LLM Providers**: `openai`, `anthropic`, `google`, `cohere`, `mistral`, `groq`, `together`
-2. **Cloud Providers**: `aws`, `azure`, `vertex`, `fireworks`, `nvidia`, `databricks`, `ai21`, `ibm`, `xai`, `upstage`
-3. **Local Models**: `huggingface`, `ollama`, `llama-cpp`
-4. **Group Packages**: 
-   - `local-models`: All local model providers
-   - `cloud-providers`: All cloud providers
-   - `all-providers`: All available providers
-   - `dev`: Development tools (pytest, black, isort)
-
-Install any provider or group:
-```bash
-pip install -e ".[local-models]"  # Install all local model providers
-pip install -e ".[cloud-providers]"  # Install all cloud providers
-pip install -e ".[dev]"  # Install development tools
-```
-
-## Selecting Models
-
-You can specify which model to use with the `--model` or `-m` flag:
-
-```bash
-# Use GPT-4 Turbo with OpenAI
-python run.py --model gpt-4-turbo
-
-# Use Claude 3 Haiku with Anthropic
-python run.py --model claude-3-haiku-20240307
-
-# Use specific provider and model
-python run.py --provider anthropic --model claude-3-haiku-20240307
-
-# Use local Ollama model
-python run.py --provider ollama --model llama3:8b
-```
-
-If no model is specified, each provider will use a default model that has been tested for browser automation.
 
 ## API Key Configuration
 
@@ -169,48 +173,6 @@ OPENAI_API_KEY=your_openai_key_here
 # Or any other provider key
 ```
 
-## Usage with Claude for Desktop
-
-After starting the server:
-
-1. Open Claude for Desktop
-2. Go to Settings → Experimental features
-3. Enable Claude API Beta
-4. Enable OpenAPI schema for API
-5. Set the API URL to: `http://localhost:8000/schema`
-
-Now you can ask Claude to perform browser automation tasks like:
-
-- "Search for the latest news about artificial intelligence"
-- "Go to example.com and fill out the contact form"
-- "Find and compare prices for a laptop on Amazon"
-
-## Development
-
-For development work, install the dev dependencies:
-
-```bash
-pip install -e ".[dev]"
-```
-
-This includes:
-- Black (code formatting)
-- isort (import sorting)
-- pytest (testing)
-
-Use these tools to maintain code quality:
-
-```bash
-# Format code
-black browser_use_mcp/
-
-# Sort imports
-isort browser_use_mcp/
-
-# Run tests
-pytest
-```
-
 ## Troubleshooting
 
 - **API Key Issues**: Ensure your API key is correctly set in your environment variables or `.env` file.
@@ -218,6 +180,7 @@ pytest
 - **Browser Automation Errors**: Check that Playwright is correctly installed with `playwright install chromium`.
 - **Model Selection**: If you get errors about an invalid model, try using the `--model` flag to specify a valid model for your provider.
 - **Debug Mode**: Use `--debug` to enable more detailed logging that can help identify issues.
+- **MCP Client Configuration**: Make sure your MCP client is correctly configured with the right command and environment variables.
 
 ## License
 
